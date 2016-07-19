@@ -1,2 +1,2 @@
 # bob-api
-An GraphQL based API for serving a data on Black owned businesses
+An GraphQL based API for serving data on Black owned businesses
