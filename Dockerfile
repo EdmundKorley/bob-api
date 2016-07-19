@@ -1,0 +1,5 @@
+FROM node
+
+MAINTAINER Black Men In Tech
+
+EXPOSE 80
