@@ -12,8 +12,7 @@ module.exports = {
         test: /\.js[x]?$/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'react', 'stage-0'],
-          plugins: ['react-relay']
+          presets: ['es2015', 'react', 'stage-0']
         }
       }
     ]
