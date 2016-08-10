@@ -1,0 +1,21 @@
+import path from 'path';
+import express from 'express';
+import GraphQLHTTP from 'express-graphql';
+import Schema from './graphql';
+
+let app = express();
+
+// Serve our React client on through the root path
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Our GraphQL endpoint that serves as an interface to all our models
+app.use('/graphql', GraphQLHTTP({
+  schema: Schema,
+  pretty: process.env.DEV,
+  graphiql: process.env.DEV
+}));
+
+// Get out server listening on a given port
+app.listen(process.env.PORT || 8000, () => {
+	console.log('Server is up and running 🍲');
+});
