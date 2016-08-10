@@ -1,13 +1,8 @@
-import request from 'request';
 import MapBoxClient from 'mapbox';
 
 // A GeoCoder class that talks to the MapZen API.
 export default class GeoCoder {
 	constructor() {
-		this.data = {
-			latLon: [ 0, 0 ],
-			address: ""
-		};
         // Initialize our MapBoxClient with our API token
 		this.client = new MapBoxClient('pk.eyJ1IjoiZW1rayIsImEiOiJjaXJoemNtbW4wMjBoZnlreGgycjJpcjVuIn0.cHqBp6dJMRzuEwuREQ0TyA');
 		// Our delay factor
