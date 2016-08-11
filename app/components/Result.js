@@ -4,9 +4,13 @@ import React, {
 
 export default class Result extends Component {
     render() {
-        return <div className="result" >
-            <h3> { this.props.name} </h3>
-            <p> { this.props.description } </p>
+        const { name, description, address, category, latitude, longitude } = this.props.result;
+        return <div className="result">
+            <h3>{name}</h3>
+            <p>{description}</p>
+            <p>{address}</p>
+            <p>{category}</p>
+            <p>{latitude}, {longitude}</p>
           </div>
     }
 }

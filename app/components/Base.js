@@ -10,8 +10,12 @@ var fetch = require('graphql-fetch')('http://localhost:8000/graphql')
 
 class Base extends Component {
   constructor(props) {
-    super(props);
-    this.state = {};
+      super(props);
+      this.state = {
+          businesses: [],
+          offset: 0,
+          limit: 10
+      };
   }
   componentDidMount() {
     let query = `
@@ -26,16 +30,24 @@ class Base extends Component {
           .then((results) => {
             if (results.errors) console.warn('****** ERRORS', results.errors);
 
-              console.log(`RESULTS ****`);
-              console.log(results);
-              return results;
+              this.setState({ businesses: results.data.businesses })
           })
           .catch((error) => {
             console.warn(`****** ERRORS ${error}`);
           });
   }
   render() {
-    console.log(`****** PROPS ${JSON.stringify(this.props, null, '\t')}`);
+      console.log(this.state.businesses);
+      let resultsLeft = [], resultsRight = [];
+      for (let i = 0; i < this.state.businesses.length; i++) {
+        // If even numbered, put in one column, else other column
+        if ( (i+1) % 2 == 0) {
+            console.log('even', i);
+            resultsLeft.push(<Result result={this.state.businesses[i]} />);
+        } else {
+            resultsRight.push(<Result result={this.state.businesses[i]} />);
+        }
+      }
     return <div className="container">
       <Header />
       <div className="jumbotron">
@@ -44,10 +56,10 @@ class Base extends Component {
       </div>
       <div className="row bob-results">
         <div className="col-lg-6">
-          <Result />
+            {resultsLeft}
         </div>
         <div className="col-lg-6">
-          <Result />
+            {resultsRight}
         </div>
       </div>
       <Footer />

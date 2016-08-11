@@ -21510,7 +21510,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -21551,66 +21551,81 @@
 	var fetch = __webpack_require__(181)('http://localhost:8000/graphql');
 
 	var Base = function (_Component) {
-	  _inherits(Base, _Component);
+	    _inherits(Base, _Component);
 
-	  function Base(props) {
-	    _classCallCheck(this, Base);
+	    function Base(props) {
+	        _classCallCheck(this, Base);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Base).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Base).call(this, props));
 
-	    _this.state = {};
-	    return _this;
-	  }
-
-	  _createClass(Base, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var query = '\n        query {\n            businesses {\n                id, name, description, category, address, latitude, longitude\n            }\n        }\n    ';
-
-	      fetch(query).then(function (results) {
-	        if (results.errors) console.warn('****** ERRORS', results.errors);
-
-	        console.log('RESULTS ****');
-	        console.log(results);
-	        return results;
-	      }).catch(function (error) {
-	        console.warn('****** ERRORS ' + error);
-	      });
+	        _this.state = {
+	            businesses: [],
+	            offset: 0,
+	            limit: 10
+	        };
+	        return _this;
 	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      console.log('****** PROPS ' + JSON.stringify(this.props, null, '\t'));
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'container' },
-	        _react2.default.createElement(_Header2.default, null),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'jumbotron' },
-	          _react2.default.createElement(_Map2.default, null),
-	          _react2.default.createElement(_Query2.default, null)
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'row bob-results' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-lg-6' },
-	            _react2.default.createElement(_Result2.default, null)
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-lg-6' },
-	            _react2.default.createElement(_Result2.default, null)
-	          )
-	        ),
-	        _react2.default.createElement(_Footer2.default, null)
-	      );
-	    }
-	  }]);
 
-	  return Base;
+	    _createClass(Base, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            var query = '\n        query {\n            businesses {\n                id, name, description, category, address, latitude, longitude\n            }\n        }\n    ';
+
+	            fetch(query).then(function (results) {
+	                if (results.errors) console.warn('****** ERRORS', results.errors);
+
+	                _this2.setState({ businesses: results.data.businesses });
+	            }).catch(function (error) {
+	                console.warn('****** ERRORS ' + error);
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log(this.state.businesses);
+	            var resultsLeft = [],
+	                resultsRight = [];
+	            for (var i = 0; i < this.state.businesses.length; i++) {
+	                // If even numbered, put in one column, else other column
+	                if ((i + 1) % 2 == 0) {
+	                    console.log('even', i);
+	                    resultsLeft.push(_react2.default.createElement(_Result2.default, { result: this.state.businesses[i] }));
+	                } else {
+	                    resultsRight.push(_react2.default.createElement(_Result2.default, { result: this.state.businesses[i] }));
+	                }
+	            }
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'container' },
+	                _react2.default.createElement(_Header2.default, null),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'jumbotron' },
+	                    _react2.default.createElement(_Map2.default, null),
+	                    _react2.default.createElement(_Query2.default, null)
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'row bob-results' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-lg-6' },
+	                        resultsLeft
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-lg-6' },
+	                        resultsRight
+	                    )
+	                ),
+	                _react2.default.createElement(_Footer2.default, null)
+	            );
+	        }
+	    }]);
+
+	    return Base;
 	}(_react.Component);
 
 	exports.default = Base;
@@ -21803,22 +21818,43 @@
 	    _createClass(Result, [{
 	        key: "render",
 	        value: function render() {
+	            var _props$result = this.props.result;
+	            var name = _props$result.name;
+	            var description = _props$result.description;
+	            var address = _props$result.address;
+	            var category = _props$result.category;
+	            var latitude = _props$result.latitude;
+	            var longitude = _props$result.longitude;
+
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "result" },
 	                _react2.default.createElement(
 	                    "h3",
 	                    null,
-	                    " ",
-	                    this.props.name,
-	                    " "
+	                    name
 	                ),
 	                _react2.default.createElement(
 	                    "p",
 	                    null,
-	                    " ",
-	                    this.props.description,
-	                    " "
+	                    description
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    address
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    category
+	                ),
+	                _react2.default.createElement(
+	                    "p",
+	                    null,
+	                    latitude,
+	                    ", ",
+	                    longitude
 	                )
 	            );
 	        }
